@@ -1,0 +1,17 @@
+projet-4/
+│
+├── _docker/
+│   ├── docker-compose.yml
+│   ├── helper.sh
+│   ├── nginx/
+│   │   └── default.conf
+│   └── php/
+│       ├── Dockerfile
+│       ├── php.ini
+│       └── .env
+│
+├── vendor/
+├── composer.json
+├── composer.lock
+├── .gitignore
+└── index.php
