@@ -1,0 +1,26 @@
+services:
+  php:
+    container_name: projet-4-php
+    image: projet-4-php-image
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    volumes:
+      - ../:/var/www/html
+    networks:
+      - sandbox-network
+
+  nginx:
+    container_name: projet-4-nginx
+    image: nginx:latest
+    volumes:
+      - ../:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8004:80"
+    networks:
+      - sandbox-network
+
+networks:
+  sandbox-network:
+    external: true
