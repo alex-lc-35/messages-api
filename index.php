@@ -1,1 +1,1 @@
-<?php echo "Hello application 4 !\n"; ?>
+<?php echo "Hello application 4 !\n";
