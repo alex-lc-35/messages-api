@@ -9,6 +9,9 @@ show_help() {
   echo ""
   echo "🛠️  Helper Docker - projet-4"
   echo ""
+  echo "DB"
+  echo "migrate"
+  echo ""
   echo "Commandes disponibles :"
   echo "  up                → Démarrer les services"
   echo "  down              → Arrêter les services"
@@ -31,6 +34,10 @@ COMMAND=$1
 shift
 
 case "$COMMAND" in
+  migrate)
+    docker compose -f "$DOCKER_COMPOSE_FILE" exec "$SERVICE_NAME" php database/migrate.php
+    ;;
+
   up)
     docker compose -f "$DOCKER_COMPOSE_FILE" up -d
     ;;

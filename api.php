@@ -7,9 +7,9 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: GET');
 
 // Ta logique API habituelle
-$db = require __DIR__ . '/db.php';
+$db = require __DIR__ . '/database/db.php';
 
-$messages = $db->select('demo', ['id', 'message']);
+$messages = $db->select('messages', ['id','type', 'content']);
 
 echo json_encode([
     'success' => true,
