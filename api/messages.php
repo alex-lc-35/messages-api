@@ -6,10 +6,20 @@ $db = getDb();
 $method = $_SERVER['REQUEST_METHOD'];
 $table = 'messages';
 
-
 if ($method === 'GET') {
-    $data = $db->select($table, ['id', 'type', 'content']);
-    jsonResponse(['success' => true, 'data' => $data]);
+    if (isset($_GET['id'])) {
+        $id = (int) $_GET['id'];
+        $message = $db->get($table, ['id', 'type', 'content'], ['id' => $id]);
+
+        if ($message) {
+            jsonResponse(['success' => true, 'data' => $message]);
+        } else {
+            jsonResponse(['success' => false, 'error' => 'Message not found'], 404);
+        }
+    } else {
+        $messages = $db->select($table, ['id', 'type', 'content']);
+        jsonResponse(['success' => true, 'data' => $messages]);
+    }
 }
 
 if ($method === 'POST') {
