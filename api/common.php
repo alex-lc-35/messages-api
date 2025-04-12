@@ -29,7 +29,7 @@ function getJsonInput() {
 /**
  * Renvoie une réponse JSON
  */
-function jsonResponse($data, int $statusCode = 200) {
+function jsonResponse($data, $statusCode = 200) {
     http_response_code($statusCode);
     echo json_encode($data);
     exit;

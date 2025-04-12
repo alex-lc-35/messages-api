@@ -6,23 +6,36 @@ $db = getDb();
 $method = $_SERVER['REQUEST_METHOD'];
 $table = 'messages';
 
-if ($method === 'GET') {
-    if (isset($_GET['id'])) {
-        $id = (int) $_GET['id'];
-        $message = $db->get($table, ['id', 'type', 'content'], ['id' => $id]);
+try {
+    match ($method) {
+        'GET'  => isset($_GET['id']) ? show($db, $table) : index($db, $table),
+        'POST' => store($db, $table),
+        default => jsonResponse(['error' => 'Method not allowed'], 405),
+    };
+} catch (Exception $e) {
+    jsonResponse(['success' => false, 'error' => $e->getMessage()], 500);
+}
 
-        if ($message) {
-            jsonResponse(['success' => true, 'data' => $message]);
-        } else {
-            jsonResponse(['success' => false, 'error' => 'Message not found'], 404);
-        }
+function index($db, $table): void
+{
+    $messages = $db->select($table, ['id', 'type', 'content']);
+    jsonResponse(['success' => true, 'data' => $messages]);
+}
+
+function show($db, $table): void
+{
+    $id = (int) $_GET['id'];
+    $message = $db->get($table, ['id', 'type', 'content'], ['id' => $id]);
+
+    if ($message) {
+        jsonResponse(['success' => true, 'data' => $message]);
     } else {
-        $messages = $db->select($table, ['id', 'type', 'content']);
-        jsonResponse(['success' => true, 'data' => $messages]);
+        jsonResponse(['success' => false, 'error' => 'Message not found'], 404);
     }
 }
 
-if ($method === 'POST') {
+function store($db, $table): void
+{
     $input = getJsonInput();
 
     if (!isset($input['type'], $input['content'])) {
@@ -36,5 +49,3 @@ if ($method === 'POST') {
 
     jsonResponse(['success' => true]);
 }
-
-jsonResponse(['error' => 'Method not allowed'], 405);
