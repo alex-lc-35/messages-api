@@ -47,5 +47,13 @@ function store($db, $table): void
         'content' => $input['content'],
     ]);
 
-    jsonResponse(['success' => true]);
+    $id = $db->id();
+
+    $message = $db->get($table, ['id', 'type', 'content'], ['id' => $id]);
+
+    jsonResponse([
+        'success' => true,
+        'message' => 'Message added successfully',
+        'data' => $message
+    ]);
 }
