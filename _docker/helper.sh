@@ -16,13 +16,9 @@ show_help() {
   echo "  up                → Démarrer les services"
   echo "  down              → Arrêter les services"
   echo "  logs              → Afficher les logs"
+  echo "  log-php           → Afficher uniquement les logs du conteneur PHP"
   echo "  sh                → Accès shell dans le conteneur PHP"
   echo "  composer [...]    → Lancer Composer avec les arguments donnés"
-  echo ""
-  echo "Exemples :"
-  echo "  ./_docker/helper.sh up"
-  echo "  ./_docker/helper.sh composer install"
-  echo ""
 }
 
 if [ $# -lt 1 ]; then
@@ -47,6 +43,9 @@ case "$COMMAND" in
   logs)
     docker compose -f "$DOCKER_COMPOSE_FILE" logs -f
     ;;
+  log-php)
+      docker compose -f "$DOCKER_COMPOSE_FILE" logs -f "$SERVICE_NAME"
+      ;;
   sh)
     docker compose -f "$DOCKER_COMPOSE_FILE" exec "$SERVICE_NAME" sh
     ;;

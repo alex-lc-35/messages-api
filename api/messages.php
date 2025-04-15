@@ -51,9 +51,45 @@ function store($db, $table): void
 
     $message = $db->get($table, ['id', 'type', 'content'], ['id' => $id]);
 
+    sendSocketEvent($message);
+
     jsonResponse([
         'success' => true,
         'message' => 'Message added successfully',
         'data' => $message
     ]);
+}
+
+function sendSocketEvent(array $data): bool
+{
+    $url = 'http://sandbox-socket:3000/api/send';
+
+    try {
+        $options = [
+            'http' => [
+                'header'  => "Content-Type: application/json\r\n",
+                'method'  => 'POST',
+                'content' => json_encode($data),
+                'timeout' => 3
+            ]
+        ];
+
+        $context = stream_context_create($options);
+        $response = @file_get_contents($url, false, $context);
+
+        if ($response === false) {
+            throw new Exception("Aucune réponse du serveur");
+        }
+
+        $decoded = json_decode($response, true);
+
+        // ✅ Log succès
+        error_log('[Socket.IO] Événement envoyé avec succès : ' . json_encode($decoded));
+        return true;
+
+    } catch (Exception $e) {
+        // ❌ Log erreur
+        error_log('[Socket.IO] Échec de l\'envoi : ' . $e->getMessage());
+        return false;
+    }
 }
