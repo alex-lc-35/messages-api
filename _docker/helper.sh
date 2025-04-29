@@ -4,14 +4,12 @@
 
 DOCKER_COMPOSE_FILE="_docker/docker-compose.yml"
 DOCKER_COMPOSE_PROD_FILE="_docker/docker-compose.prod.yml"
-SERVICE_NAME="php"
+SERVICE_NAME="projet-4-php"
+CONTAINER_NAME="projet-4-php"
 
 show_help() {
   echo ""
   echo "🛠️  Helper Docker - projet-4"
-  echo ""
-  echo "DB"
-  echo "migrate"
   echo ""
   echo "Commandes disponibles :"
   echo "  up                → Démarrer les services (développement)"
@@ -22,6 +20,8 @@ show_help() {
   echo "  log-php           → Afficher uniquement les logs du conteneur PHP"
   echo "  sh                → Accès shell dans le conteneur PHP"
   echo "  composer [...]    → Lancer Composer avec les arguments donnés"
+  echo "  destroy           → Supprimer totalement le conteneur PHP"
+  echo "  refresh           → Rafraîchir le code (redémarrer PHP proprement)"
 }
 
 if [ $# -lt 1 ]; then
@@ -36,7 +36,6 @@ case "$COMMAND" in
   migrate)
     docker compose -f "$DOCKER_COMPOSE_FILE" exec "$SERVICE_NAME" php database/migrate.php
     ;;
-
   up)
     docker compose -f "$DOCKER_COMPOSE_FILE" up -d
     ;;
@@ -60,6 +59,15 @@ case "$COMMAND" in
     ;;
   composer)
     docker compose -f "$DOCKER_COMPOSE_FILE" exec "$SERVICE_NAME" composer "$@"
+    ;;
+  destroy)
+    echo "❗ Suppression totale du conteneur $CONTAINER_NAME"
+    docker stop "$CONTAINER_NAME" || true
+    docker rm "$CONTAINER_NAME" || true
+    ;;
+  refresh)
+    echo "🔄 Rafraîchissement du code (redémarrage de PHP)"
+    docker restart "$CONTAINER_NAME"
     ;;
   *)
     echo "❌ Commande inconnue: $COMMAND"
