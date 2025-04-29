@@ -3,6 +3,7 @@
 # Helper multi-commande pour le projet-4 (PHP / Composer)
 
 DOCKER_COMPOSE_FILE="_docker/docker-compose.yml"
+DOCKER_COMPOSE_PROD_FILE="_docker/docker-compose.prod.yml"
 SERVICE_NAME="php"
 
 show_help() {
@@ -13,8 +14,10 @@ show_help() {
   echo "migrate"
   echo ""
   echo "Commandes disponibles :"
-  echo "  up                → Démarrer les services"
-  echo "  down              → Arrêter les services"
+  echo "  up                → Démarrer les services (développement)"
+  echo "  down              → Arrêter les services (développement)"
+  echo "  up-prod           → Démarrer les services (production)"
+  echo "  down-prod         → Arrêter les services (production)"
   echo "  logs              → Afficher les logs"
   echo "  log-php           → Afficher uniquement les logs du conteneur PHP"
   echo "  sh                → Accès shell dans le conteneur PHP"
@@ -40,12 +43,18 @@ case "$COMMAND" in
   down)
     docker compose -f "$DOCKER_COMPOSE_FILE" down
     ;;
+  up-prod)
+    docker compose -f "$DOCKER_COMPOSE_PROD_FILE" up -d
+    ;;
+  down-prod)
+    docker compose -f "$DOCKER_COMPOSE_PROD_FILE" down
+    ;;
   logs)
     docker compose -f "$DOCKER_COMPOSE_FILE" logs -f
     ;;
   log-php)
-      docker compose -f "$DOCKER_COMPOSE_FILE" logs -f "$SERVICE_NAME"
-      ;;
+    docker compose -f "$DOCKER_COMPOSE_FILE" logs -f "$SERVICE_NAME"
+    ;;
   sh)
     docker compose -f "$DOCKER_COMPOSE_FILE" exec "$SERVICE_NAME" sh
     ;;

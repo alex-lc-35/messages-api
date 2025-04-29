@@ -14,8 +14,8 @@
 .env.*.local
 
 # Fichiers Docker éventuels
-docker-compose.override.yml
 .docker/
+_docker/docker-compose.override.yml
 
 # PhpStorm
 .idea/

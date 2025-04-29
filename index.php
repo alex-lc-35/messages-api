@@ -1,11 +1,11 @@
 <?php
-$db = require __DIR__ . '/db.php';
+$db = require __DIR__ . '/database/db.php';
 
-$users = $db->select('demo', ['id', 'message']);
+$messages = $db->select('messages', ['id', 'content']);
 
 $res = "";
-foreach ($users as $user) {
-    $res .= $user['id'] . "\t" . $user['message'] . "\n";
+foreach ($messages as $user) {
+    $res .= $user['id'] . "\t" . $user['content'] . "\n";
 }
 
 echo nl2br($res);
