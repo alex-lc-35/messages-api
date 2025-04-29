@@ -1,27 +1,27 @@
 #!/bin/bash
 
-# Helper multi-commande pour le projet-4 (PHP / Composer)
+# Helper multi-commande pour le projet-4 (global, prod d'abord)
 
 DOCKER_COMPOSE_FILE="_docker/docker-compose.yml"
 DOCKER_COMPOSE_PROD_FILE="_docker/docker-compose.prod.yml"
-SERVICE_NAME="projet-4-php"
-CONTAINER_NAME="projet-4-php"
 
 show_help() {
   echo ""
-  echo "🛠️  Helper Docker - projet-4"
+  echo "🛠️  Helper Docker - projet-4 (global)"
   echo ""
   echo "Commandes disponibles :"
-  echo "  up                → Démarrer les services (développement)"
-  echo "  down              → Arrêter les services (développement)"
-  echo "  up-prod           → Démarrer les services (production)"
-  echo "  down-prod         → Arrêter les services (production)"
-  echo "  logs              → Afficher les logs"
-  echo "  log-php           → Afficher uniquement les logs du conteneur PHP"
-  echo "  sh                → Accès shell dans le conteneur PHP"
-  echo "  composer [...]    → Lancer Composer avec les arguments donnés"
-  echo "  destroy           → Supprimer totalement le conteneur PHP"
-  echo "  refresh           → Rafraîchir le code (redémarrer PHP proprement)"
+  echo "  prod-up            → Démarrer tous les services (production)"
+  echo "  prod-down          → Arrêter tous les services (production)"
+  echo "  prod-destroy       → Supprimer complètement tous les conteneurs (production)"
+  echo "  prod-refresh       → Redémarrer tous les services (production)"
+  echo "  up                 → Démarrer tous les services (développement)"
+  echo "  down               → Arrêter tous les services (développement)"
+  echo "  destroy            → Supprimer complètement tous les conteneurs (développement)"
+  echo "  refresh            → Redémarrer tous les services (développement)"
+  echo "  logs-php           → Afficher les logs du conteneur PHP"
+  echo "  logs-nginx         → Afficher les logs du conteneur Nginx"
+  echo "  sh-php             → Accès shell dans le conteneur PHP"
+  echo "  composer [...]     → Lancer Composer dans le conteneur PHP"
 }
 
 if [ $# -lt 1 ]; then
@@ -33,8 +33,20 @@ COMMAND=$1
 shift
 
 case "$COMMAND" in
-  migrate)
-    docker compose -f "$DOCKER_COMPOSE_FILE" exec "$SERVICE_NAME" php database/migrate.php
+  prod-up)
+    docker compose -f "$DOCKER_COMPOSE_PROD_FILE" up -d
+    ;;
+  prod-down)
+    docker compose -f "$DOCKER_COMPOSE_PROD_FILE" down
+    ;;
+  prod-destroy)
+    echo "❗ Suppression complète des services en production"
+    docker compose -f "$DOCKER_COMPOSE_PROD_FILE" down --volumes --remove-orphans
+    ;;
+  prod-refresh)
+    echo "🔄 Redémarrage complet des services en production"
+    docker compose -f "$DOCKER_COMPOSE_PROD_FILE" down
+    docker compose -f "$DOCKER_COMPOSE_PROD_FILE" up -d --build
     ;;
   up)
     docker compose -f "$DOCKER_COMPOSE_FILE" up -d
@@ -42,32 +54,28 @@ case "$COMMAND" in
   down)
     docker compose -f "$DOCKER_COMPOSE_FILE" down
     ;;
-  up-prod)
-    docker compose -f "$DOCKER_COMPOSE_PROD_FILE" up -d
-    ;;
-  down-prod)
-    docker compose -f "$DOCKER_COMPOSE_PROD_FILE" down
-    ;;
-  logs)
-    docker compose -f "$DOCKER_COMPOSE_FILE" logs -f
-    ;;
-  log-php)
-    docker compose -f "$DOCKER_COMPOSE_FILE" logs -f "$SERVICE_NAME"
-    ;;
-  sh)
-    docker compose -f "$DOCKER_COMPOSE_FILE" exec "$SERVICE_NAME" sh
-    ;;
-  composer)
-    docker compose -f "$DOCKER_COMPOSE_FILE" exec "$SERVICE_NAME" composer "$@"
-    ;;
   destroy)
-    echo "❗ Suppression totale du conteneur $CONTAINER_NAME"
-    docker stop "$CONTAINER_NAME" || true
-    docker rm "$CONTAINER_NAME" || true
+    echo "❗ Suppression complète des services en développement"
+    docker compose -f "$DOCKER_COMPOSE_FILE" down --volumes --remove-orphans
     ;;
   refresh)
-    echo "🔄 Rafraîchissement du code (redémarrage de PHP)"
-    docker restart "$CONTAINER_NAME"
+    echo "🔄 Redémarrage complet des services en développement"
+    docker compose -f "$DOCKER_COMPOSE_FILE" down
+    docker compose -f "$DOCKER_COMPOSE_FILE" up -d --build
+    ;;
+  logs-php)
+    echo "📜 Logs du conteneur projet-4-php"
+    docker logs -f projet-4-php
+    ;;
+  logs-nginx)
+    echo "📜 Logs du conteneur projet-4-nginx"
+    docker logs -f projet-4-nginx
+    ;;
+  sh-php)
+    docker exec -it projet-4-php sh
+    ;;
+  composer)
+    docker exec -it projet-4-php composer "$@"
     ;;
   *)
     echo "❌ Commande inconnue: $COMMAND"
