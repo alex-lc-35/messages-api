@@ -14,10 +14,12 @@ show_help() {
   echo "  prod-down          → Arrêter tous les services (production)"
   echo "  prod-destroy       → Supprimer complètement tous les conteneurs (production)"
   echo "  prod-refresh       → Redémarrer tous les services (production)"
+  echo "  prod-restart       → Redémarrer tous les services (production)"
   echo "  up                 → Démarrer tous les services (développement)"
   echo "  down               → Arrêter tous les services (développement)"
   echo "  destroy            → Supprimer complètement tous les conteneurs (développement)"
   echo "  refresh            → Redémarrer tous les services (développement)"
+  echo "  restart            → Redémarrer tous les services (développement)"
   echo "  logs-php           → Afficher les logs du conteneur PHP"
   echo "  logs-nginx         → Afficher les logs du conteneur Nginx"
   echo "  sh-php             → Accès shell dans le conteneur PHP"
@@ -48,6 +50,10 @@ case "$COMMAND" in
     docker compose -f "$DOCKER_COMPOSE_PROD_FILE" down
     docker compose -f "$DOCKER_COMPOSE_PROD_FILE" up -d --build
     ;;
+  prod-restart)
+    echo "🔄 Redémarrage des services en production"
+    docker compose -f "$DOCKER_COMPOSE_PROD_FILE" restart
+    ;;
   up)
     docker compose -f "$DOCKER_COMPOSE_FILE" up -d
     ;;
@@ -62,6 +68,10 @@ case "$COMMAND" in
     echo "🔄 Redémarrage complet des services en développement"
     docker compose -f "$DOCKER_COMPOSE_FILE" down
     docker compose -f "$DOCKER_COMPOSE_FILE" up -d --build
+    ;;
+  restart)
+    echo "🔄 Redémarrage des services en développement"
+    docker compose -f "$DOCKER_COMPOSE_FILE" restart
     ;;
   logs-php)
     echo "📜 Logs du conteneur projet-4-php"
