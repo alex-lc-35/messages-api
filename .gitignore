@@ -15,7 +15,7 @@
 
 # Fichiers Docker éventuels
 .docker/
-_docker/docker-compose.override.yml
+_docker/.env
 
 # PhpStorm
 .idea/
