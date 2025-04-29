@@ -1,19 +1,24 @@
-projet-4/
-├── _docker/
-│   ├── nginx/
+.
+├── _docker
+│   ├── nginx
 │   │   └── default.conf
-│   └── php/
-│       ├── Dockerfile
-│       ├── php.ini
-│       ├── .env
-│       ├── docker-compose.yml
-│       └── helper.sh
-├── database/
+│   ├── php
+│   │   ├── Dockerfile
+│   │   ├── php.ini
+│   │   ├── .env
+│   │   ├── docker-compose.prod.yml
+│   │   ├── docker-compose.yml
+│   │   └── helper.sh
+├── api
+│   ├── common.php
+│   └── messages.php
+├── database
 │   ├── db.php
 │   └── migrate.php
 ├── doc/
 ├── vendor/
+├── .env
 ├── .gitignore
-├── api.php
 ├── composer.json
-└── composer.lock
+├── composer.lock
+├── index.php
