@@ -1,5 +1,5 @@
 {
-  "name": "projet/projet-4",
+  "name": "projet/messages-api",
   "autoload": {
     "psr-4": {
       "App\\": "src/"

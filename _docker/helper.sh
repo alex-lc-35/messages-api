@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Helper multi-commande pour le projet-4 (global, prod d'abord)
+# Helper multi-commande pour le messages-api (global, prod d'abord)
 
 DOCKER_COMPOSE_FILE="_docker/docker-compose.yml"
 DOCKER_COMPOSE_PROD_FILE="_docker/docker-compose.prod.yml"
 
 show_help() {
   echo ""
-  echo "🛠️  Helper Docker - projet-4 (global)"
+  echo "🛠️  Helper Docker - messages-api (global)"
   echo ""
   echo "Commandes disponibles :"
   echo "  prod-up            → Démarrer tous les services (production)"
@@ -74,18 +74,18 @@ case "$COMMAND" in
     docker compose -f "$DOCKER_COMPOSE_FILE" restart
     ;;
   logs-php)
-    echo "📜 Logs du conteneur projet-4-php"
-    docker logs -f projet-4-php
+    echo "📜 Logs du conteneur messages-api-php"
+    docker logs -f messages-api-php
     ;;
   logs-nginx)
-    echo "📜 Logs du conteneur projet-4-nginx"
-    docker logs -f projet-4-nginx
+    echo "📜 Logs du conteneur messages-api-nginx"
+    docker logs -f messages-api-nginx
     ;;
   sh-php)
-    docker exec -it projet-4-php sh
+    docker exec -it messages-api-php sh
     ;;
   composer)
-    docker exec -it projet-4-php composer "$@"
+    docker exec -it messages-api-php composer "$@"
     ;;
   *)
     echo "❌ Commande inconnue: $COMMAND"

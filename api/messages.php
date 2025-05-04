@@ -62,7 +62,7 @@ function store($db, $table): void
 
 function sendSocketEvent(array $data): bool
 {
-    $url = 'http://sandbox-socket:3000/api/send';
+    $url = 'http://messages-socket:3000/socket/send';
 
     try {
         $options = [

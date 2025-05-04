@@ -1,7 +1,7 @@
 services:
   php:
-    container_name: projet-4-php
-    image: projet-4-php-image
+    container_name: messages-api-php
+    image: messages-api-php-image
     build:
       context: ./php
       dockerfile: Dockerfile
@@ -12,7 +12,7 @@ services:
       - sandbox-network
 
   nginx:
-    container_name: projet-4-nginx
+    container_name: messages-api-nginx
     image: nginx:latest
     volumes:
       - ../:/var/www/html
@@ -21,9 +21,9 @@ services:
       - "80"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.projet-4.rule=Host(`test1.rfess.fr`)"
-      - "traefik.http.routers.projet-4.entrypoints=web"
-      - "traefik.http.services.projet-4.loadbalancer.server.port=80"
+      - "traefik.http.routers.messages-api.rule=Host(`test1.rfess.fr`)"
+      - "traefik.http.routers.messages-api.entrypoints=web"
+      - "traefik.http.services.messages-api.loadbalancer.server.port=80"
     networks:
       - sandbox-network
 
