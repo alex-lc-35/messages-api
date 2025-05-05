@@ -5,14 +5,19 @@ require __DIR__ . '/../vendor/autoload.php';
 use Medoo\Medoo;
 use Dotenv\Dotenv;
 
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
-$dotenv->load();
+// Charge le fichier .env uniquement s’il existe (utile en local uniquement)
+$envPath = __DIR__ . '/../.env';
+if (file_exists($envPath)) {
+    $dotenv = Dotenv::createImmutable(dirname($envPath));
+    $dotenv->load();
+}
 
+// Création de la connexion via Medoo, en utilisant getenv() pour toutes les valeurs
 return new Medoo([
-    'type' => 'mysql',
-    'host' => $_ENV['DB_HOST'],
-    'database' => $_ENV['DB_NAME'],
-    'username' => $_ENV['DB_USER'],
-    'password' => $_ENV['DB_PASS'],
-    'charset' => 'utf8mb4',
+    'type'     => 'mysql',
+    'host'     => getenv('DB_HOST') ?: 'localhost',
+    'database' => getenv('DB_NAME') ?: 'messages',
+    'username' => getenv('DB_USER') ?: 'root',
+    'password' => getenv('DB_PASS') ?: '',
+    'charset'  => 'utf8mb4',
 ]);

@@ -1,16 +1,18 @@
 services:
-  php:
+  messages-api-php:
     container_name: messages-api-php
     image: messages-api-php-image
     build:
       context: ./php
       dockerfile: Dockerfile
+    env_file:
+      - ../.env
     volumes:
       - ../:/var/www/html
     networks:
       - sandbox-network
 
-  nginx:
+  messages-api-nginx:
     container_name: messages-api-nginx
     image: nginx:latest
     volumes:

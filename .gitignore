@@ -1,26 +1,34 @@
-# Fichiers et dossiers spécifiques à PHP
-/vendor/
-/composer.lock
-
-# Cache et logs
-*.log
-*.cache
-.phpunit.result.cache
-
-# Dossiers communs
-/node_modules/
-/.env
-.env.local
-.env.*.local
-
-# Fichiers Docker éventuels
-.docker/
-_docker/.env
-
-# PhpStorm
+##############
+# IDE / OS
+##############
 .idea/
-*.iml
-
-# Autres fichiers système
+.vscode/
 .DS_Store
 Thumbs.db
+
+##############
+# Environnement
+##############
+.env
+_docker/.env
+
+##############
+# Logs
+##############
+*.log
+
+##############
+# Docker
+##############
+*.tar
+
+##############
+# PHP / Composer
+##############
+vendor/
+composer.lock
+
+##############
+# Dossiers d’exécution
+##############
+/storage/

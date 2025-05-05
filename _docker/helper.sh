@@ -1,25 +1,28 @@
 #!/bin/bash
 
-# Helper multi-commande pour le messages-api (global, prod d'abord)
+# Helper multi-commande pour le projet messages-api
 
 DOCKER_COMPOSE_FILE="_docker/docker-compose.yml"
 DOCKER_COMPOSE_PROD_FILE="_docker/docker-compose.prod.yml"
 
+PHP_CONTAINER="messages-api-php"
+NGINX_CONTAINER="messages-api-nginx"
+
 show_help() {
   echo ""
-  echo "🛠️  Helper Docker - messages-api (global)"
+  echo "🛠️  Helper Docker - messages-api"
   echo ""
   echo "Commandes disponibles :"
-  echo "  prod-up            → Démarrer tous les services (production)"
-  echo "  prod-down          → Arrêter tous les services (production)"
-  echo "  prod-destroy       → Supprimer complètement tous les conteneurs (production)"
-  echo "  prod-refresh       → Redémarrer tous les services (production)"
-  echo "  prod-restart       → Redémarrer tous les services (production)"
-  echo "  up                 → Démarrer tous les services (développement)"
-  echo "  down               → Arrêter tous les services (développement)"
-  echo "  destroy            → Supprimer complètement tous les conteneurs (développement)"
-  echo "  refresh            → Redémarrer tous les services (développement)"
-  echo "  restart            → Redémarrer tous les services (développement)"
+  echo "  prod-up            → Démarrer les services (production)"
+  echo "  prod-down          → Arrêter les services (production)"
+  echo "  prod-destroy       → Supprimer complètement les conteneurs (production)"
+  echo "  prod-refresh       → Redémarrer complètement les services (production)"
+  echo "  prod-restart       → Redémarrer les services (production)"
+  echo "  up                 → Démarrer les services (développement)"
+  echo "  down               → Arrêter les services (développement)"
+  echo "  destroy            → Supprimer complètement les conteneurs (développement)"
+  echo "  refresh            → Redémarrer complètement les services (développement)"
+  echo "  restart            → Redémarrer les services (développement)"
   echo "  logs-php           → Afficher les logs du conteneur PHP"
   echo "  logs-nginx         → Afficher les logs du conteneur Nginx"
   echo "  sh-php             → Accès shell dans le conteneur PHP"
@@ -74,18 +77,18 @@ case "$COMMAND" in
     docker compose -f "$DOCKER_COMPOSE_FILE" restart
     ;;
   logs-php)
-    echo "📜 Logs du conteneur messages-api-php"
-    docker logs -f messages-api-php
+    echo "📜 Logs de $PHP_CONTAINER"
+    docker logs -f "$PHP_CONTAINER"
     ;;
   logs-nginx)
-    echo "📜 Logs du conteneur messages-api-nginx"
-    docker logs -f messages-api-nginx
+    echo "📜 Logs de $NGINX_CONTAINER"
+    docker logs -f "$NGINX_CONTAINER"
     ;;
   sh-php)
-    docker exec -it messages-api-php sh
+    docker exec -it "$PHP_CONTAINER" sh
     ;;
   composer)
-    docker exec -it messages-api-php composer "$@"
+    docker exec -it "$PHP_CONTAINER" composer "$@"
     ;;
   *)
     echo "❌ Commande inconnue: $COMMAND"

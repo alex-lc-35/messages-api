@@ -1,0 +1,16 @@
+# Ne pas ignorer les Dockerfiles ni les .ini
+# Ignorer seulement les scripts ou fichiers inutiles
+
+.git
+vendor/
+node_modules/
+doc/
+tests/
+.env
+.env.*
+*.log
+*.md
+
+# OK : on n'ignore PAS les Dockerfiles ni les confs
+# Seulement les helpers shell
+_docker/**/*.sh

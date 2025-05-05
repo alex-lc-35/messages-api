@@ -1,17 +1,17 @@
 services:
-  php:
+  messages-api-php:
     container_name: messages-api-php
-    image: messages-api-php-image
+    image: messages-api-php-image:prod
     build:
-      context: ./php
-      dockerfile: Dockerfile
-    volumes:
-      - ../:/var/www/html
+      context: ..
+      dockerfile: _docker/php/Dockerfile.prod
     user: "${UID}:${GID}"
+    env_file:
+      - ../.env
     networks:
       - sandbox-network
 
-  nginx:
+  messages-api-nginx:
     container_name: messages-api-nginx
     image: nginx:latest
     volumes:
@@ -21,7 +21,7 @@ services:
       - "80"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.messages-api.rule=Host(`test1.rfess.fr`)"
+      - "traefik.http.routers.messages-api.rule=Host(`messages.rfess.fr`) && PathPrefix(`/api`)"
       - "traefik.http.routers.messages-api.entrypoints=web"
       - "traefik.http.services.messages-api.loadbalancer.server.port=80"
     networks:
