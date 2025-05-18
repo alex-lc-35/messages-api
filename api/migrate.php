@@ -1,6 +1,6 @@
 <?php
 
-$db = require __DIR__ . '/db.php';
+$db = require __DIR__ . '/../database/db.php';
 
 // Supprimer la table si elle existe
 $db->query("DROP TABLE IF EXISTS messages");
